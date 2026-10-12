@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#ff6b9a">
+    <title>Una cita para dos 💖</title>
+    <style>
+        :root {
+            --pink: #ff5d8f;
+            --hot-pink: #e93670;
+            --cream: #fff9fb;
+            --ink: #5c2942;
+            --muted: #9a6178;
+            --shadow: 0 25px 70px rgba(155, 49, 91, .2);
+        }
+
+        * { box-sizing: border-box; }
+
+        body {
+            min-height: 100vh;
+            margin: 0;
+            display: grid;
+            place-items: center;
+            overflow-x: hidden;
+            color: var(--ink);
+            font-family: Georgia, "Times New Roman", serif;
+            background:
+                radial-gradient(circle at 15% 15%, #ffd6e3 0 9%, transparent 10%),
+                radial-gradient(circle at 85% 80%, #ffdce8 0 12%, transparent 13%),
+                linear-gradient(135deg, #fff0f5 0%, #ffe0eb 50%, #fff8fa 100%);
+        }
+
+        body::before,
+        body::after {
+            position: fixed;
+            z-index: -1;
+            color: rgba(255, 93, 143, .2);
+            font-size: clamp(5rem, 14vw, 10rem);
+            content: "♥";
+            animation: float 5s ease-in-out infinite;
+        }
+
+        body::before { top: 8%; left: 7%; }
+        body::after { right: 8%; bottom: 5%; animation-delay: -2.2s; }
+
+        .card {
+            width: min(92vw, 650px);
+            padding: clamp(2rem, 6vw, 4.5rem);
+            text-align: center;
+            background: rgba(255, 255, 255, .82);
+            border: 1px solid rgba(255, 255, 255, .9);
+            border-radius: 32px;
+            box-shadow: var(--shadow);
+            backdrop-filter: blur(10px);
+        }
+
+        .heart { margin: 0 0 .7rem; color: var(--pink); font-size: 4rem; line-height: 1; animation: beat 1.3s infinite; }
+        h1 { margin: 0; color: var(--hot-pink); font-size: clamp(2rem, 6vw, 3.5rem); }
+        h2 { margin: .7rem 0 .5rem; font-size: clamp(1.45rem, 4vw, 2rem); }
+        .subtitle { margin: 0 auto 2rem; color: var(--muted); font-family: Arial, sans-serif; font-size: 1rem; line-height: 1.5; }
+        .question { min-height: 2.5em; margin: 0 0 1.6rem; font-size: 1.2rem; line-height: 1.4; }
+        .buttons { display: flex; justify-content: center; align-items: center; gap: 1rem; min-height: 74px; }
+        button {
+            border: 0;
+            border-radius: 999px;
+            padding: .85rem 1.8rem;
+            color: #fff;
+            cursor: pointer;
+            font: 700 1rem Arial, sans-serif;
+            transition: transform .25s ease, box-shadow .25s ease, font-size .25s ease;
+        }
+        button:focus-visible { outline: 4px solid #ffc0d3; outline-offset: 3px; }
+        #yes, #five { background: linear-gradient(135deg, var(--pink), var(--hot-pink)); box-shadow: 0 8px 18px rgba(233, 54, 112, .27); }
+        #no, #four { color: var(--hot-pink); background: #fff; border: 2px solid #ffc0d3; }
+        #yes:hover, #five:hover { transform: translateY(-3px); box-shadow: 0 12px 22px rgba(233, 54, 112, .34); }
+        #no { position: relative; }
+        #message { min-height: 1.6em; margin: 1.4rem 0 0; color: var(--hot-pink); font-style: italic; }
+        .hidden { display: none !important; }
+        .choice-note { margin: 1.5rem 0 0; color: var(--muted); font: .85rem Arial, sans-serif; }
+        .final-heart { font-size: 4.5rem; }
+        .final-text { margin: 1.2rem 0 0; font-size: clamp(1.5rem, 4vw, 2.2rem); line-height: 1.35; }
+
+        @keyframes beat { 0%, 100% { transform: scale(1); } 15% { transform: scale(1.16); } 30% { transform: scale(1); } }
+        @keyframes float { 0%, 100% { transform: translateY(0) rotate(-10deg); } 50% { transform: translateY(-18px) rotate(10deg); } }
+        @media (max-width: 450px) {
+            .card { padding: 2rem 1.2rem; }
+            .buttons { gap: .6rem; }
+            button { padding: .8rem 1.15rem; }
+        }
+    </style>
+</head>
+<body>
+    <main class="card">
+        <section id="date-step">
+            <div class="heart" aria-hidden="true">♥</div>
+            <h1>Una preguntita, amor...</h1>
+            <p class="subtitle">Tengo un plan precioso preparado para nosotros.</p>
+            <p class="question">¿Quieres quedar conmigo hoy?</p>
+            <div class="buttons">
+                <button id="yes" type="button">Sí, claro 💖</button>
+                <button id="no" type="button">No</button>
+            </div>
+            <p id="message" aria-live="polite"></p>
+        </section>
+
+        <section id="time-step" class="hidden">
+            <div class="heart" aria-hidden="true">♥</div>
+            <h2>¡Sabía que dirías que sí! 🥰</h2>
+            <p class="subtitle">Ahora solo nos falta elegir la hora...</p>
+            <p class="question">¿A qué hora quedamos?</p>
+            <div class="buttons">
+                <button id="four" type="button">A las 4</button>
+                <button id="five" type="button">A las 5</button>
+            </div>
+            <p id="time-message" aria-live="polite"></p>
+        </section>
+
+        <section id="final-step" class="hidden">
+            <div class="heart final-heart" aria-hidden="true">♥</div>
+            <p class="final-text">Perfecto amor, quedamos hoy a las 5.<br>Te quiero mucho 💕</p>
+        </section>
+    </main>
+
+    <script>
+        const dateStep = document.querySelector("#date-step");
+        const timeStep = document.querySelector("#time-step");
+        const finalStep = document.querySelector("#final-step");
+        const yes = document.querySelector("#yes");
+        const no = document.querySelector("#no");
+        const four = document.querySelector("#four");
+        const five = document.querySelector("#five");
+        const message = document.querySelector("#message");
+        const timeMessage = document.querySelector("#time-message");
+
+        const noMessages = [
+            "Pero qué te crees, ¿con libertad de escoger? Bua ja ja ja 😘",
+            "Yo soy quien manda en esta relación... ¡Te querio! Pulsa que sí 💕",
+            "Yo soy el macho alfa 🦁",
+            "Aquí se hace lo que yo diga: ¡una cita contigo! 😌",
+            "Anda, pulsa que sí y dame un Muchi muuuu 💖"
+        ];
+        const fourMessages = [
+            "¿Qué te crees, que me levanto temprano? 😘",
+            "Siempre me preparo a las 3:55, ¿te crees que voy a llegar a las 4? Jajaja",
+            "Yo siempre llego una hora antes que tú :P",
+            "Siempre llegando tarde y yo llegando temprano 💘"
+        ];
+        let noClicks = 0;
+        let fourClicks = 0;
+        const noLimit = 5;
+        const fourLimit = 4;
+
+        no.addEventListener("click", () => {
+            noClicks++;
+            message.textContent = noMessages[(noClicks - 1) % noMessages.length];
+            const scale = Math.min(1 + noClicks * .13, 1.75);
+            yes.style.transform = `scale(${scale})`;
+            no.style.transform = `translate(${Math.sin(noClicks * 2.4) * 55}px, ${Math.cos(noClicks * 1.7) * 18}px) rotate(${noClicks % 2 ? -5 : 5}deg)`;
+
+            if (noClicks >= noLimit) {
+                no.classList.add("hidden");
+                yes.style.transform = "scale(1.35)";
+                message.textContent = "Se acabaron las opciones... solo queda decir que sí 💖";
+                yes.focus();
+            }
+        });
+
+        yes.addEventListener("click", () => {
+            dateStep.classList.add("hidden");
+            timeStep.classList.remove("hidden");
+            five.focus();
+        });
+
+        four.addEventListener("click", () => {
+            fourClicks++;
+            timeMessage.textContent = fourMessages[(fourClicks - 1) % fourMessages.length];
+            five.style.transform = `scale(${Math.min(1 + fourClicks * .18, 1.9)})`;
+            four.style.transform = `translateX(${fourClicks % 2 ? -28 : 28}px) rotate(${fourClicks % 2 ? -4 : 4}deg)`;
+
+            if (fourClicks >= fourLimit) {
+                four.classList.add("hidden");
+                five.style.transform = "scale(1.4)";
+                timeMessage.textContent = "La hora perfecta es a las 5... ¡ya solo puedes elegir esa! ⏰💕";
+                five.focus();
+            }
+        });
+
+        five.addEventListener("click", () => {
+            timeStep.classList.add("hidden");
+            finalStep.classList.remove("hidden");
+        });
+    </script>
+</body>
+</html>
